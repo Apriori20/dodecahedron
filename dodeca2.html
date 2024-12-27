@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dodecahedron: One Red Pentagon Linking</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: #222; }
+    #info {
+      position: absolute; top:0; left:0; z-index:10;
+      color:#fff; font-family:sans-serif; padding:1em;
+    }
+
+    #info {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.5); /* Optional: semi-transparent background */
+      color: white; /* Text color */
+      padding: 1em; /* Internal spacing */
+      border-radius: 10px; /* Optional: rounded corners */
+    }
+
+  </style>
+</head>
+<body>
+<div id="info">
+  <h1>hi!!!!!</h1>
+  <p>each face is an artifact, they get lit up with colours each day</p>
+</div>
+
+<!-- Load Three.js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
+
+<script>
+let scene, camera, renderer;
+let dodecahedron;
+let geo;                    // We'll keep a reference to the final geometry
+let redNormalKey = "";     // We'll store the normalKey for the red pentagon
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+// The link we want only the red pentagon to have
+const RED_PENTAGON_LINK = "myLink.html";
+
+init();
+animate();
+
+function init() {
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(
+    70, 
+    window.innerWidth / window.innerHeight,
+    0.1,
+    100
+  );
+  camera.position.set(0, 0, 5);
+
+  renderer = new THREE.WebGLRenderer({antialias: true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Lights
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+  scene.add(ambientLight);
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(1, 1, 1);
+  scene.add(dirLight);
+
+  // (1) Create DodecahedronBufferGeometry
+  const baseGeo = new THREE.DodecahedronGeometry(1.8, 0);
+  // (2) Convert to NON-INDEXED so each triangle is spelled out
+  geo = baseGeo.toNonIndexed();
+
+  // We'll create a Float32Array for per-vertex colors
+  const vertexCount = geo.attributes.position.count;
+  const colors = new Float32Array(vertexCount * 3);
+
+  // (3) Group triangles by shared normal => each pentagon has 3 triangles
+  const normalMap = new Map();
+
+  for (let triIndex = 0; triIndex < vertexCount / 3; triIndex++) {
+    // read the normal of the first vertex in this triangle
+    const nx = geo.attributes.normal.getX(triIndex * 3 + 0);
+    const ny = geo.attributes.normal.getY(triIndex * 3 + 0);
+    const nz = geo.attributes.normal.getZ(triIndex * 3 + 0);
+
+    // round each component to avoid floating mismatch
+    const rx = Math.round(nx * 1000) / 1000;
+    const ry = Math.round(ny * 1000) / 1000;
+    const rz = Math.round(nz * 1000) / 1000;
+    const normalKey = `${rx},${ry},${rz}`;
+
+    if (!normalMap.has(normalKey)) {
+      normalMap.set(normalKey, []);
+    }
+    normalMap.get(normalKey).push(triIndex);
+  }
+
+  // (4) Color exactly one pentagon in red, the rest in green
+  let first = true;
+  for (const [key, triIndices] of normalMap.entries()) {
+    // pick color
+    const color = first ? new THREE.Color(0xff0000) : new THREE.Color(0x44aa88);
+    if (first) {
+      // store the normalKey for the red pentagon
+      redNormalKey = key;
+      first = false;
+    }
+
+    // color all triangles in this group
+    triIndices.forEach(triIndex => {
+      const vertStart = triIndex * 3;
+      for (let v = 0; v < 3; v++) {
+        const i = (vertStart + v) * 3;
+        colors[i + 0] = color.r;
+        colors[i + 1] = color.g;
+        colors[i + 2] = color.b;
+      }
+    });
+  }
+
+  // (5) Attach the colors to the geometry
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+
+  // (6) Material uses per-vertex colors
+  const material = new THREE.MeshPhongMaterial({
+    vertexColors: true,
+    flatShading: true,
+    shininess: 80
+  });
+
+  dodecahedron = new THREE.Mesh(geo, material);
+  scene.add(dodecahedron);
+
+  // event listeners
+  window.addEventListener("resize", onWindowResize);
+  window.addEventListener("click", onClick);
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onClick(event) {
+  // Raycast to see if the user clicked the dodecahedron
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+
+  const intersects = raycaster.intersectObject(dodecahedron);
+  if (intersects.length > 0) {
+    // get the triangle index (faceIndex)
+    const triIndex = intersects[0].faceIndex;
+    // read that triangle's normal
+    const nx = geo.attributes.normal.getX(triIndex * 3 + 0);
+    const ny = geo.attributes.normal.getY(triIndex * 3 + 0);
+    const nz = geo.attributes.normal.getZ(triIndex * 3 + 0);
+
+    // round so it matches our normalKey logic
+    const rx = Math.round(nx * 1000) / 1000;
+    const ry = Math.round(ny * 1000) / 1000;
+    const rz = Math.round(nz * 1000) / 1000;
+    const normalKey = `${rx},${ry},${rz}`;
+
+    // If this triangle's pentagon is the red pentagon, go to the link
+    if (normalKey === redNormalKey) {
+      window.location.href = "redpentagon.html";
+      ;
+    }
+  }
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+
+        // Spin the dodecahedron
+  dodecahedron.rotation.x += 0.009;
+  dodecahedron.rotation.y += 0.009;
+
+  renderer.render(scene, camera);
+}
+</script>
+</body>
+</html>

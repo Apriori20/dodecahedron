@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Origin of the Kremlin Yolka</title>
+  <style>
+    /* 
+      Make the page fill the browser window,
+      center everything, and set background to light blue
+    */
+    html, body {
+      margin: 0;
+      padding: 20%;
+      height: 100%;
+    }
+    body {
+      background-color: #add8e6; /* Light blue */
+      font-family: sans-serif;
+      margin: 0; /* Remove default margin */
+      padding: 2em; /* Add space between content and page edges */
+      display: flex; /* Flexbox for centering */
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      height: 100vh; /* Make body fill the full height of the viewport */
+      box-sizing: border-box; /* Include padding in the element's width/height */
+    }
+
+
+    /* Center the text container and give some styling */
+    .content {
+      text-align: center;
+      z-index: 1; /* so it appears above snowflakes */
+    }
+
+    .content h1 {
+      margin-bottom: 1em;
+    }
+
+    .container {
+      width: 50%; /* Make the content smaller */
+      max-width: 600px; /* Prevent it from being too wide on large screens */
+      text-align: center; /* Center the text */
+      background-color: #ffffff; /* Optional: add a white background */
+      padding: 1em; /* Add internal spacing around the content */
+      border-radius: 10px; /* Optional: round the corners */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for depth */
+}
+
+
+    /* Snowflake container (we'll create multiple snowflakes) */
+    .snowflake {
+      position: absolute;
+      top: -5px;        /* start slightly above the page */
+      color: #fff;      /* white snow */
+      font-size: 1.2em; /* you can vary this or randomize it */
+      user-select: none;
+      pointer-events: none;
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    /* 
+      Basic falling animation: 
+      Move from top of the screen to bottom (110% so it goes past the viewport)
+    */
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="content">
+    <h1>The Origin of the Kremlin Yolka</h1>
+    <p>So, yolka (ёлка) is the Russian word for 'Christmas tree', but it is also used to refer to Christmas/New Year's celebrations (though is somewhat archaic in this sense)...
+
+      <p> You prob know this, but before the revolution, New Year was not celebrated on a large scale. The main holiday was Christmas, which according to the old style was on December 25 (today it's on the 7th cause the church still uses the old calendar).</p>
+      
+     <p> After the revolution, there was an anti-religious campaign, so Christmas was removed from the calendar. The communists called for people not to gather at home near the Christmas tree, but to go out into the streets, dress up in costumes of priests, saints, devils, gods etc. In 1922, "Komsomol Christmas", was held for the first time. Here's a newspaper description of the carnival on January 7, 1923:</p>
+       
+      <p> <i>At the head of the procession are horsemen. They hold a huge poster saying "Today is Komsomol Christmas." Behind the horsemen move cars with "gods": here are Osiris and Marduk, Buddha and Jehovah, Allah and Christ. Another car is full of "angels" and "devils." A truck with "priests," "rabbis," "mullahs," "shamans," "priests," "pastors." Each of them praises his "faith," in his own way promising "salvation" and "heavenly blessings." Here is a group of young Komsomol members depicting the "baptism of Rus." ... And with the onset of dusk, numerous fake "gods" and "bourgeois" are burned on the square near the Alexandrovsky Station. The youth disperse singing the Internationale.</i> </p>
+      
+      <p> The following year, the "Komsomol Christmas" was not as large-scale + many still celebrated the old way at home.</p>
+      
+      <p></p>In 1929, the government issued a decree "On the transition to continuous production in enterprises and institutions of the USSR": so January 7 became a working day. Citizens were forbidden to celebrate Christmas or New Year and decorate Christmas trees... But, six years later, Stalin personally ordered the revival of the celebration in the USSR with the main holiday becoming December 31.</p>
+      
+     <p></p> In 1935, high-ranking official Postyshev published an article in "Pravda" titled "Let's organize a good Yolka for the children for the New Year!":</p>
+      
+     <p></p> <i>In pre-revolutionary times, the bourgeoisie always arranged a New Year's Yolka for their children. The workers' children looked enviously through the window at the tree sparkling with multi-colored lights and the children of the rich enjoying themselves around it... The wrong condemnation of Yolka, which is a wonderful entertainment for children, should be put to an end. ... In schools, orphanages, in pioneer palaces, in children's clubs, in children's cinemas and theaters - there should be a children's Yolka everywhere!</i></p>
+      
+      <p></p>Postyshev's proposal was endorsed by Stalin, so on December 29, 1935, an urgent telegram was sent to all the cities in the USSR: 'organize a New Year's Yolka for the children'. They were only able to do it in Kharkov that year, but in 1937 all cities had massive celebrations... </p>
+      
+      <p></p>In 1953, the main Yolka became the Kremlin Yolka, held in the Grand Kremlin Palace... The first celebrations were v ideological with plays featuring workers, red army soldiers etc...in the 60s, they shifted to fairy tales...</p>
+      
+      [Tickets for the Kremlin Yolka were given to students with excellent grades from all over the country]. Parents/adults were not allowed to attend.
+    </p>
+  </div>
+
+  <!-- We'll generate multiple snowflakes in JavaScript -->
+  <script>
+    const SNOWFLAKE_COUNT = 30; // how many snowflakes you want
+
+    for (let i = 0; i < SNOWFLAKE_COUNT; i++) {
+      // Create a snowflake element
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+      // You can use a snowflake symbol or a simple asterisk
+      snowflake.innerText = '❄'; 
+      
+      // Random horizontal start position (0% to 100%)
+      const startLeft = Math.random() * 100; 
+      
+      // Random duration between 5s to 15s
+      const fallDuration = 5 + Math.random() * 10;
+
+      // Random delay so not all snowflakes start at once
+      const delay = Math.random() * 5;
+
+      // Random size (optional)
+      const size = 1 + Math.random() * 1; // between 1em and 2em
+      snowflake.style.fontSize = size + 'em';
+
+      // Apply these as inline styles
+      snowflake.style.left = startLeft + 'vw';
+      snowflake.style.animationDuration = fallDuration + 's';
+      snowflake.style.animationDelay = delay + 's';
+
+      document.body.appendChild(snowflake);
+    }
+  </script>
+</body>
+</html>
+
