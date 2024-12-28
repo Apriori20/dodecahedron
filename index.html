@@ -38,8 +38,19 @@ let scene, camera, renderer;
 let dodecahedron;
 let geo;                    // We'll keep a reference to the final geometry
 let redNormalKey = "";     // We'll store the normalKey for the red pentagon
+let yellowNormalKey = "";     // store normalKey for yellow
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+
+const cursor = {
+    current: 'default'
+};
+
+let isDragging = false;
+let previousMousePosition = {
+    x: 0,
+    y: 0
+};
 
 // The link we want only the red pentagon to have
 const RED_PENTAGON_LINK = "myLink.html";
@@ -100,14 +111,21 @@ function init() {
 
   // (4) Color exactly one pentagon in red, the rest in green
   let first = true;
+  let second = true;
   for (const [key, triIndices] of normalMap.entries()) {
-    // pick color
-    const color = first ? new THREE.Color(0xff0000) : new THREE.Color(0x44aa88);
-    if (first) {
-      // store the normalKey for the red pentagon
-      redNormalKey = key;
-      first = false;
-    }
+        // Pick color
+        let color;
+        if (first) {
+            color = new THREE.Color(0xff0000);  // First face red
+            redNormalKey = key;
+            first = false;
+        } else if (second) {
+            color = new THREE.Color(0xffff00);  // Second face yellow
+            yellowNormalKey = key;
+            second = false;
+        } else {
+            color = new THREE.Color(0x44aa88);  // Rest green
+        }
 
     // color all triangles in this group
     triIndices.forEach(triIndex => {
@@ -137,6 +155,9 @@ function init() {
   // event listeners
   window.addEventListener("resize", onWindowResize);
   window.addEventListener("click", onClick);
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mousedown', onMouseDown);
+  window.addEventListener('mouseup', onMouseUp);
 }
 
 function onWindowResize() {
@@ -169,20 +190,84 @@ function onClick(event) {
     // If this triangle's pentagon is the red pentagon, go to the link
     if (normalKey === redNormalKey) {
       window.location.href = "redpentagon.html";
+    } else if (normalKey === yellowNormalKey) {
+      window.location.href = "https://drive.google.com/file/d/14xWPinXV8GSc0fW3oJAMm2nlmAG8IyFb/view?usp=sharing";  // Your new link here
+    }
+}
       ;
     }
-  }
+
+
+// Add this function after your other function definitions
+function onMouseDown(event) {
+    isDragging = true;
+    previousMousePosition = {
+        x: event.clientX,
+        y: event.clientY
+    };
 }
+
+function onMouseUp() {
+    isDragging = false;
+}
+
+function onMouseMove(event) {
+    // First handle the cursor change for clickable faces (your existing code)
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObject(dodecahedron);
+    if (intersects.length > 0) {
+        const triIndex = intersects[0].faceIndex;
+        const nx = geo.attributes.normal.getX(triIndex * 3 + 0);
+        const ny = geo.attributes.normal.getY(triIndex * 3 + 0);
+        const nz = geo.attributes.normal.getZ(triIndex * 3 + 0);
+
+        const rx = Math.round(nx * 1000) / 1000;
+        const ry = Math.round(ny * 1000) / 1000;
+        const rz = Math.round(nz * 1000) / 1000;
+        const normalKey = `${rx},${ry},${rz}`;
+
+        if (normalKey === redNormalKey || normalKey === yellowNormalKey) {
+            document.body.style.cursor = 'pointer';
+        } else {
+            document.body.style.cursor = isDragging ? 'grabbing' : 'grab';
+        }
+    } else {
+        document.body.style.cursor = isDragging ? 'grabbing' : 'grab';
+    }
+
+    // Then handle the dragging
+    if (isDragging) {
+        const deltaMove = {
+            x: event.clientX - previousMousePosition.x,
+            y: event.clientY - previousMousePosition.y
+        };
+
+        dodecahedron.rotation.y += deltaMove.x * 0.01;
+        dodecahedron.rotation.x += deltaMove.y * 0.01;
+
+        previousMousePosition = {
+            x: event.clientX,
+            y: event.clientY
+        };
+    }
+}
+
 
 function animate() {
-  requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 
-        // Spin the dodecahedron
-  dodecahedron.rotation.x += 0.009;
-  dodecahedron.rotation.y += 0.009;
+    // Only do automatic rotation if we're not dragging
+    if (!isDragging) {
+        dodecahedron.rotation.x += 0.009;
+        dodecahedron.rotation.y += 0.009;
+    }
 
-  renderer.render(scene, camera);
+    renderer.render(scene, camera);
 }
+
 </script>
 </body>
 </html>
