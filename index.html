@@ -39,6 +39,8 @@ let dodecahedron;
 let geo;                    // We'll keep a reference to the final geometry
 let redNormalKey = "";     // We'll store the normalKey for the red pentagon
 let yellowNormalKey = "";     // store normalKey for yellow
+let cyanNormalKey = "";   // store normalKey for cyan
+
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -54,6 +56,8 @@ let previousMousePosition = {
 
 // The link we want only the red pentagon to have
 const RED_PENTAGON_LINK = "myLink.html";
+const CYAN_PENTAGON_LINK = "cyanpentagon.html";  // change to whatever page
+
 
 init();
 animate();
@@ -112,6 +116,8 @@ function init() {
   // (4) Color exactly one pentagon in red, the rest in green
   let first = true;
   let second = true;
+  let third = true;
+
   for (const [key, triIndices] of normalMap.entries()) {
         // Pick color
         let color;
@@ -123,6 +129,10 @@ function init() {
             color = new THREE.Color(0xffff00);  // Second face yellow
             yellowNormalKey = key;
             second = false;
+        } else if (third) {
+            color = new THREE.Color(0x00ffff);  // cyan (new face)
+            cyanNormalKey = key;
+            third = false;
         } else {
             color = new THREE.Color(0x44aa88);  // Rest green
         }
@@ -173,29 +183,32 @@ function onClick(event) {
   raycaster.setFromCamera(mouse, camera);
 
   const intersects = raycaster.intersectObject(dodecahedron);
-  if (intersects.length > 0) {
-    // get the triangle index (faceIndex)
-    const triIndex = intersects[0].faceIndex;
-    // read that triangle's normal
-    const nx = geo.attributes.normal.getX(triIndex * 3 + 0);
-    const ny = geo.attributes.normal.getY(triIndex * 3 + 0);
-    const nz = geo.attributes.normal.getZ(triIndex * 3 + 0);
+  if (intersects.length === 0) return;
 
-    // round so it matches our normalKey logic
-    const rx = Math.round(nx * 1000) / 1000;
-    const ry = Math.round(ny * 1000) / 1000;
-    const rz = Math.round(nz * 1000) / 1000;
-    const normalKey = `${rx},${ry},${rz}`;
+  // get the triangle index (faceIndex)
+  const triIndex = intersects[0].faceIndex;
 
-    // If this triangle's pentagon is the red pentagon, go to the link
-    if (normalKey === redNormalKey) {
-      window.location.href = "redpentagon.html";
-    } else if (normalKey === yellowNormalKey) {
-      window.location.href = "https://drive.google.com/file/d/14xWPinXV8GSc0fW3oJAMm2nlmAG8IyFb/view?usp=sharing";  // Your new link here
-    }
+  // read that triangle's normal
+  const nx = geo.attributes.normal.getX(triIndex * 3 + 0);
+  const ny = geo.attributes.normal.getY(triIndex * 3 + 0);
+  const nz = geo.attributes.normal.getZ(triIndex * 3 + 0);
+
+  // round so it matches our normalKey logic
+  const rx = Math.round(nx * 1000) / 1000;
+  const ry = Math.round(ny * 1000) / 1000;
+  const rz = Math.round(nz * 1000) / 1000;
+  const normalKey = `${rx},${ry},${rz}`;
+
+  if (normalKey === redNormalKey) {
+    window.location.href = "redpentagon.html";
+  } else if (normalKey === yellowNormalKey) {
+    window.location.href =
+      "https://drive.google.com/file/d/14xWPinXV8GSc0fW3oJAMm2nlmAG8IyFb/view?usp=sharing";
+  } else if (normalKey === cyanNormalKey) {
+    window.location.href = CYAN_PENTAGON_LINK; // or "cyanpentagon.html"
+  }
 }
-      ;
-    }
+
 
 
 // Add this function after your other function definitions
@@ -229,7 +242,7 @@ function onMouseMove(event) {
         const rz = Math.round(nz * 1000) / 1000;
         const normalKey = `${rx},${ry},${rz}`;
 
-        if (normalKey === redNormalKey || normalKey === yellowNormalKey) {
+        if (normalKey === redNormalKey || normalKey === yellowNormalKey || normalKey === cyanNormalKey) {
             document.body.style.cursor = 'pointer';
         } else {
             document.body.style.cursor = isDragging ? 'grabbing' : 'grab';
@@ -271,3 +284,5 @@ function animate() {
 </script>
 </body>
 </html>
+
+

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cyan Pentagon</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+        background: #a7f3ff;
+        font-family: sans-serif;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        margin: 0;
+        padding: 7rem 2rem;
+        box-sizing: border-box;
+
+        position: relative;
+}
+
+
+    /* Content card */
+    .content {
+        z-index: 2;
+        width: min(720px, 92vw);
+        margin: 0 auto;              /* add this */
+        background: rgba(255,255,255,0.88);
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        padding: 1.25em 1.25em 1.1em;
+        text-align: center;          /* change this */
+        backdrop-filter: blur(4px);
+        position: relative;
+}
+
+
+    .content h1 {
+      margin: 0 0 0.6em;
+      text-align: center;
+      letter-spacing: 0.2px;
+    }
+
+    .header-img {
+        display: block;
+        width: min(320px, 65%);
+        height: auto;
+        margin: 0 auto 1.1em;  /* centers it + adds space below */
+        border-radius: 12px;   /* optional: soft corners */
+}
+
+
+    .content p {
+      line-height: 1.55;
+      margin: 0.75em 0;
+    }
+
+    /* Snowflakes */
+    .snowflake {
+      position: absolute;
+      top: -5px;
+      color: #fff;
+      user-select: none;
+      pointer-events: none;
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      z-index: 1; /* above piano, below card */
+      opacity: 0.95;
+      text-shadow: 0 0 6px rgba(255,255,255,0.35);
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Tiny “back” link (optional) */
+    .back {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 3;
+      background: rgba(0,0,0,0.35);
+      color: white;
+      padding: 8px 10px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .back:hover { background: rgba(0,0,0,0.5); }
+  </style>
+</head>
+<body>
+
+  <!-- Optional back link -->
+  <a class="back" href="index.html">← back</a>
+
+ 
+
+  <div class="content">
+    <img class="header-img" src="girlk.png" alt="Keyboard" />
+
+    <p>
+     
+        <p>When his mother disappeared, Yuki felt warmer.</p>
+
+        <p>That is not to say he didn’t love her. Rather, it was as if coldness disappeared as a concept, in the same way if blue disappeared the sky would be red, or orange, but somehow never blue. The warmth came from absence, and Yuki would find himself craving cold whenever he saw a mother.</p>
+        
+        <p>Yuki was only three when his mother disappeared and so had no particular memory of her. The siblings did not talk about her much. Every new year the family built snowmen together, his father would meticulously craft a tall, slender, regal one. “It’s your mother,” he would say, before going back to carefully using icicles from the shed to realize the snowwoman’s hair.</p>
+        
+        <p>After his nineteenth birthday, Yuki prepared for a visit to Asakura Temple to pay respects to his mother. The metro ride was long. For a particular section of it he was alone and the car he was in became sacred. His skin tingled with sensations of snowflakes. The moment Yuki became aware of this, the car stopped and feet started entering the car. Yuki focused on the feet. There were onyx dress-shoes, expensive mocassins, impeccable boots. The sacred feeling was gone.</p>
+        
+        <p>He suddenly realized that he was staring at the feet instead of exiting. He squeezed out right before the doors closed. There was a long escalator up. Ahead of him was an old man on a walker, holding tightly the sides of the escalator.</p>
+        
+        <p>Yuki remembered that a few years ago, he and his father and three of his siblings rescued a snow-white cat with an injured foot when walking through a forest. He remembered not being very popular with cats — they always scratched him — but this one mostly stared at him with a balance of relief and wary as they nursed its foot with gauze before the vet arrived. “She’s not from this area,” the vet said, confused, “… anyway, your mother taught you well,” he said absentmindedly before taking her away. Yuki remembered stealing a glance at his father, who chuckled with his body and not his face, while putting away the gauze and scissors.</p>
+        
+        <p>On the ascent Yuki heard a song, minor key, simple chords, floaty descents. The sustains felt slightly wrong, always a bit late and released a bit suddenly. The melody felt like snowflakes. He liked it.</p>
+        
+        <p>It was a girl playing keyboard outside of the station. Her can was empty except for a solitary 100-yen coin and what looked like a purple bubblegum wrapper. She was wearing a sweater with vertical stripes. For some reason Yuki thought of icicles. She noticed him from the corner of her eye, gave a small bow, and finished the song.</p>
+        
+        <p>Besides Yuki, there were only two other passerby who paused to listen to the song. One of them tugged at his mother, pointing to the can. The mother shook her head and hastily pulled the boy away. Yuki felt a slight chill, but cozy, like the kind of breath you take for the first time in winter.</p>
+        
+        <p>The girl started to flip through her leaves for a new piece to play, but she stopped to look at Yuki, who was fumbling through his pockets. He didn’t realize he was going through his pockets. Last time he gave money to a stranger was exactly five years ago, and the stranger had big biceps. “Sorry, I got nothing.” He said.</p>
+        
+        <p>“It’s okay. Thank you! I’m just practicing and don’t need the money.” The girl seemed more apologetic than Yuki was, so much that the crutch next to her started to fall from her stumbling. Yuki reached forward to catch the crutch, but with inhuman reflexes she caught the crutch with her right hand and returned it to place. Yuki noticed that her right foot was in a cast.</p>
+        
+        <p>“Hope that gets better.”</p>
+        
+        <p>“I’m sure it will be fine. I’ve been through way worse.”</p>
+        
+        <p>“Like what?” He realized this was not very polite after asking it. She paused to think about her response, but showed no displeasure.</p>
+        
+        <p>“Once I found some friends and we were jumping over a fire for fun. They were all okay with it but I was badly burnt. I then evaporated for a while and was afraid to make new friends.”</p>
+        
+        <p>“Why, it wasn’t your fault?”</p>
+        
+        <p>Silence, though somewhere to the north a carol started playing. The bells reminded him of shopping and of childhood village saunas, oddly at the same time.</p>
+        
+        <p>“… it wasn’t! But one can still feel bad, like… like how it’s just hard being human, you know?”</p>
+        
+        <p>…</p>
+        
+        <p>“You have 9 siblings? How does that work?”</p>
+        
+        <p>…</p>
+        
+        <p>“So you like Kawabata, but prefer Bach over Rachmaninoff? How’s that possible?”</p>
+        
+        <p>…</p>
+        
+        <p>“I miss winters with my grandfather, but he’s too busy around this time.”</p>
+        
+        <p>…</p>
+        
+        <p>They both realized it was dark. The sleepy stars competed with neon signs, under a crescent moon that resembled a closing eye.</p>
+        
+        <p>“Merry Christmas,” she said, the last syllable trailing off.</p>
+        
+        <p>“Merry Christmas,” he replied, but looking into her eyes. They scintillated. Her eyes should be brown, black even, but were they… green? Only sometimes, like a dream struggling to keep form.</p>
+        
+        <p>“I had a heart once, you know.” She blurted out.</p>
+        
+        <p>Nonplussed, he blinked and waited.</p>
+        
+        <p>“I guess it’s having a heart that can kill you. But it… it really is worth it.”</p>
+        
+        <p>He kept staring. She stared back, earnest but desperate.</p>
+        
+        <p>The carols from the north were louder now, almost jarring. They sounded like onyx dress-shoes, expensive moccasins, impeccable boots. The sky was turning golden-white from some artificial lighting triggered by the night and the stars were no longer visible. The brightness was deafening and mesmerizing. Yuki suddenly remembered two things: one, he still had to go to the temple and two, he wasn’t looking at the girl anymore. He felt an empty warmth.</p>
+        
+        <p>He looked back. She was gone.</p>
+        
+    </p>
+
+  </div>
+
+  <script>
+    const SNOWFLAKE_COUNT = 30;
+
+    for (let i = 0; i < SNOWFLAKE_COUNT; i++) {
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+      snowflake.innerText = '❄';
+
+      const startLeft = Math.random() * 100;
+      const fallDuration = 5 + Math.random() * 10;
+      const delay = Math.random() * 5;
+
+      const size = 0.9 + Math.random() * 1.3;
+      snowflake.style.fontSize = size + 'em';
+
+      snowflake.style.left = startLeft + 'vw';
+      snowflake.style.animationDuration = fallDuration + 's';
+      snowflake.style.animationDelay = delay + 's';
+
+      document.body.appendChild(snowflake);
+    }
+  </script>
+</body>
+</html>
